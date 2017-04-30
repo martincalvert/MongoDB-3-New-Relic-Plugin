@@ -19,3 +19,13 @@ __Running__
 `newrelic-plugin-agent -c /path/to/config.cfg`
 
 _add `-f` for foreground monitoring_
+
+
+### Setup
+1. Add your newrelic license key into the config file
+2. Alter the GUID in mongodb.py so it shows up in your new relic account
+3. Run the plugin
+4. Build your dashboards
+
+### Deploying
+Currently I don't include any packaging with the plugin, I would suggest dropping it off with chef (git resource) then adding a service file to start it.
