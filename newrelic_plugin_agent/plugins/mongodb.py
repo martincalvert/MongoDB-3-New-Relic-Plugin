@@ -12,7 +12,6 @@ from newrelic_plugin_agent.plugins import base
 
 LOGGER = logging.getLogger(__name__)
 
-
 class MongoDB(base.Plugin):
     # SETUP: Set this GUID to something unique.
     GUID = 'CHANGE.ME'
@@ -175,10 +174,12 @@ class MongoDB(base.Plugin):
                 kwargs[key] = self.config[key]
         try:
             client =  pymongo.MongoClient(**kwargs)
-            username = self.config.get('admin_username', 'root')
-            password = self.config.get('admin_password', 'password')
-            auth_db = self.config.get('authDB', 'admin')
-            client[auth_db].authenticate(username, password)
+            admin = self.config.get('admin', {})
+            if 'username' in admin.keys():
+                username = admin.get('username', 'root')
+                password = admin.get('password', 'password')
+                auth_db = admin.get('auth_db', 'admin')
+                client[auth_db].authenticate(username, password)
             return client
         except pymongo.errors.ConnectionFailure as error:
             LOGGER.error('Could not connect to MongoDB: %s', error)
